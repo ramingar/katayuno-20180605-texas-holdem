@@ -1,0 +1,7 @@
+.idea
+node_modules
+sonar-project.properties
+coverage.data
+.scannerwork
+.nyc_output
+sonar-scanner-linux
