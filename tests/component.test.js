@@ -1,53 +1,61 @@
 import test from 'tape';
 
-const Card = function () {
+const Card = function (cardAsString) {
 
-    const get = function ({card}) {
-        const value = Number.parseInt(card.split('')[0]);
-        const family = card.split('')[1];
-
-        return Object.freeze({value, family});
+    const VALUE_EQUIVALENCES = {
+        'J': 11,
+        'Q': 12,
+        'K': 13,
+        'A': 14
     };
 
-    const isPair = function ({card1},{card2}) {
-        const value1 = get({card: card1}).value;
-        const value2 = get({card: card2}).value;
+    const family = cardAsString.substr(cardAsString.length - 1);
+    const value  = cardAsString.substr(0, cardAsString.indexOf(family));
 
-        return value1 === value2;
+    const getValue = function () {
+
+        const cardValue = VALUE_EQUIVALENCES[value] ? VALUE_EQUIVALENCES[value] : value;
+        return parseInt(cardValue);
     };
 
-    return Object.freeze({get, isPair});
+    const getFamily = function () {
+        return family;
+    };
+
+    return {getValue, getFamily};
 };
 
-test(`-------- Component: Testing the number of a card`, (assert) => {
-    const messageResult  = `Testing if we are able to retrieve the number of a card`;
-    const expectedtNumber = 6;
-    const testedCard = Card();
+// TEST --------------------------------------------------------------------------------
 
-    const {value} = testedCard.get({card: '6c'});
+test(`-------- Component: Testing card's value`, (assert) => {
+    const message           = `Testing if we are able to retrieve the card's value`;
+    const expectedCardValue = 10;
+    const card              = Card('10h');
 
-    assert.equal(value, expectedtNumber, messageResult);
-    assert.end();
-});
-test(`-------- Component: Testing the family of a card`, (assert) => {
-    const messageResult  = `Testing if we are able to retrieve the number of a card`;
-    const expectedtFamily = 'c';
-    const testedCard = Card();
+    const actualCardValue = card.getValue();
 
-    const {family} = testedCard.get({card: '6c'});
-
-    assert.equal(family, expectedtFamily, messageResult);
+    assert.equal(actualCardValue, expectedCardValue, message);
     assert.end();
 });
 
-test(`-------- Component: Testing if we have a pair`, (assert) => {
-    const messageResult  = `Testing true if we have a pair`;
-    const expectedResult = true;
-    const testedCard = Card();
+test(`-------- Component: Testing card's family`, (assert) => {
+    const message           = `Testing if we are able to retrieve the card's family`;
+    const expectedCardValue = 'c';
+    const card              = Card('10c');
 
-    const pair = testedCard.isPair({card1: '8h'}, {card2: '8c'});
+    const actualCardValue = card.getFamily();
 
-    assert.equal(pair, expectedResult, messageResult);
+    assert.equal(actualCardValue, expectedCardValue, message);
     assert.end();
 });
 
+test(`-------- Component: Testing figure's card's value`, (assert) => {
+    const message           = `Testing if we are able to retrieve the figure's card's value`;
+    const expectedCardValue = 13;
+    const card              = Card('Kc');
+
+    const actualCardValue = card.getValue();
+
+    assert.equal(actualCardValue, expectedCardValue, message);
+    assert.end();
+});
